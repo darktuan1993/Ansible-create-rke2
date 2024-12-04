@@ -6,7 +6,7 @@
   #     include_vars:
   #       file: global_vars/var.yaml
 
-- name: ==== KHOI TAO RANCHER KUBERNETES ENGINE 2 ====
+- name: ==== BRAVO - RANCHER RKE2 AUTOMATION ====
   hosts: k8s-cluster
   roles:
      - pingCheck
