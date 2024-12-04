@@ -1,12 +1,12 @@
-- name: Check list variable
+- name: ==== KIỂM TRA BIẾN MÔI TRƯỜNG TRONG ANSIBLE  ====
   hosts: k8s-cluster
   gather_facts: false
-  tasks:
-    - name: Include variables from var.yaml
-      include_vars:
-        file: global_vars/var.yaml
+  # tasks:
+  #   - name: KIỂM TRA BIẾN MÔI TRƯỜNG TRONG ANSIBLE
+  #     include_vars:
+  #       file: global_vars/var.yaml
 
-- name: CREATE CLUSTER KUBERNETES 
+- name: ==== KHỞI TẠO TASK TẠO RANCHER KUBERNETES ENGINE 2 ====
   hosts: k8s-cluster
   roles:
      - pingCheck
