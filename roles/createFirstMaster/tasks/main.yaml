@@ -6,6 +6,21 @@
 - name: XÁC ĐỊNH HOST MASTER KHÁC
   ansible.builtin.set_fact:
     is_other_master: "{{ groups['masters'].index(inventory_hostname) > 0 }}"
+
+- name: IN KẾT QUẢ HOST MASTER ĐẦU TIÊN
+  debug:
+    msg: "Host này là master đầu tiên"
+  when: is_first_master
+
+- name: IN KẾT QUẢ HOST MASTER KHÁC
+  debug:
+    msg: "Host này là master khác"
+  when: is_other_master
+
+
+
+
+
 # Init First Node Master
 # - name: CAI DAT RKE2-SERVER
 #   shell: |
