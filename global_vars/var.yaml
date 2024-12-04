@@ -3,6 +3,9 @@ VERSION_k8s: 1.28
 VERSION_PATCH: 14-2.1
 
 
+# Version RKE2
+VERSION_RKE2: v1.28.15+rke2r1
+
 # Tên host name
 HOSTNAME_SV: rke2
 EVN_SV: dev
