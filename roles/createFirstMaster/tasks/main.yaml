@@ -1,9 +1,9 @@
 # Check node Master chính
-- name: MASTER ĐẦU TIÊN
+- name: KIEM TRA MASTER DAU TIEN
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-- name: MASTER KHÁC
+- name: KIEM TRA MASTER KHAC
   ansible.builtin.set_fact:
     is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
 
