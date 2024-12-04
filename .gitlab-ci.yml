@@ -1,0 +1,23 @@
+# image: bachdangtuan/test-ansible
+image: bachdangtuan/test-ansible
+stages:
+  - deploy
+
+variables:
+  ANSIBLE_HOST_KEY_CHECKING: "False"
+  ANSIBLE_CONFIG: "/ansible.cfg"
+
+before_script:
+  - mkdir -p ~/.ssh
+  - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+  - chmod 600 ~/.ssh/id_ed25519
+  - eval $(ssh-agent -s)
+  - ssh-add ~/.ssh/id_ed25519
+create-deploy-kubernetes:
+  tags:
+    - jump-server
+  stage: deploy
+  when: manual
+  script:
+    - echo "============ CREATE CLUSTER KUBERNETES MANAGER =============== "
+    - ansible-playbook -i inventory/host.ini create-config.yaml

@@ -1,0 +1,8 @@
+- name: Xóa Kubernetes
+  script: ../../script/delete-ubuntu.sh
+  become: yes
+  register: script_output
+
+- name: Display stdout of the setup script
+  debug:
+    var: script_output.stdout_lines

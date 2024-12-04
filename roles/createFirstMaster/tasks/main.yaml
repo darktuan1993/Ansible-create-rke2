@@ -1,0 +1,61 @@
+- name: List name record domain
+  include_vars:
+    file: ../../global_vars/var.yaml
+
+# Check node Master chính
+- name: MASTER ĐẦU TIÊN
+  ansible.builtin.set_fact:
+    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+
+- name: MASTER KHÁC
+  ansible.builtin.set_fact:
+    is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
+
+- name: Debug the value of main master
+  debug:
+    var: is_first_master
+
+- name: Debug the value of other master
+  debug:
+    var: is_other_master
+
+################## COPY THÀNH PHẦN CHÍNH #############
+- name: Copy Kubernetes manifest to remote server
+  copy:
+    src: "../../../script"
+    dest: "/tmp"
+    mode: '0755'
+    directory_mode: '0755'
+  when: is_first_master
+
+# # Init First Node Master
+- name: Initialize Kubernetes on the first master
+  shell: |
+    kubeadm init \
+      --kubernetes-version=1.28.0 \
+      --control-plane-endpoint="{{DOMAIN_MANAGER}}:{{PORT_CLUSTER_APP}}" \
+      --pod-network-cidr={{pod_network_cidr}} \
+      --upload-certs
+  when: is_first_master
+  register: kubeadm_init_output
+
+- name: Display stdout of the setup script
+  debug:
+    var: kubeadm_init_output
+  when: is_first_master
+
+#  tạo thư mục service account
+- name: Tạo thư mục service account
+  shell: |
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+  when: is_first_master
+  register: createfolder
+
+- name: Tạo thư mục service account
+  debug:
+    var: createfolder
+  when: is_first_master
+
+    

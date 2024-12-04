@@ -1,0 +1,124 @@
+# Check node Master chính
+- name: MASTER ĐẦU TIÊN
+  ansible.builtin.set_fact:
+    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+
+- name: Debug the value of main master
+  debug:
+    var: is_first_master
+
+
+################## CHẠY KHỞI CHẠY CÁC PLUGIN #############
+
+- name: KHỞI CHẠY CÁC PLUGIN MANIFEST
+  shell: |
+    kubectl create ns argocd
+    kubectl create ns istio-system
+
+    for file in /tmp/script/manifest/*.yaml; do
+        kubectl apply -f "$file"
+    done
+
+    kubectl apply -f /tmp/script/manifest/argocd/argocd.yaml -n argocd
+    kubectl apply -f /tmp/script/manifest/argocd/istio-argocd.yaml
+
+    echo " ================= Cài đặt helm chart ================= "
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    kubectl create ns bravo-monitoring
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    helm install metrics-k8s-stats prometheus-community/kube-state-metrics --namespace bravo-monitoring --set replicas=1
+    helm install node-exporter prometheus-community/prometheus-node-exporter --namespace bravo-monitoring
+    echo "================= setup Rancher ================="
+    helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+    kubectl create namespace cattle-system
+    helm repo add jetstack https://charts.jetstack.io
+    helm repo update
+    
+    helm install cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --set crds.enabled=true
+
+    helm install rancher rancher-stable/rancher \
+    --namespace cattle-system \
+    --set hostname={{DOMAIN_RANCHER}} \
+    --set bootstrapPassword=admin \
+    --version 2.8.5
+
+    echo "================= setup CSI Container ================="
+    curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.8.0/deploy/install-driver.sh | bash -s v4.8.0 --
+
+    echo "================= setup ECK Operator ================="
+
+    kubectl create -f https://download.elastic.co/downloads/eck/1.9.1/crds.yaml
+    kubectl apply -f https://download.elastic.co/downloads/eck/1.9.1/operator.yaml
+
+
+    echo "================= setup ARGOCD ================="
+
+    ARGOCD_VERSION="v2.10.6"
+    curl -sSL -o /tmp/argocd-${ARGOCD_VERSION} https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64
+    chmod +x /tmp/argocd-${ARGOCD_VERSION}
+    sudo mv /tmp/argocd-${ARGOCD_VERSION} /usr/local/bin/argocd
+
+
+    echo "================= setup App Manager ================="
+    
+    kubectl patch service istio-ingressgateway -n istio-system -p '{
+      "spec": {
+        "type": "NodePort",
+        "ports": [
+          {
+            "port": 80,
+            "targetPort": 8080,
+            "nodePort": 31111
+          }
+        ]
+      }
+    }'
+    
+    kubectl patch service rancher -n cattle-system -p '{
+      "spec": {
+        "type": "NodePort",
+        "ports": [
+          {
+            "port": 80,
+            "targetPort": 80,
+            "nodePort": 30220
+          },
+          {
+            "port": 443,
+            "targetPort": 444,
+            "nodePort": 30221
+          }
+        ]
+      }
+    }'
+
+    kubectl patch service prometheus -n istio-system -p '{
+          "spec": {
+            "type": "NodePort",
+            "ports": [
+              {
+                "port": 9090,
+                "targetPort": 9090,
+                "nodePort": 31419
+              }
+            ]
+          }
+    }'
+
+    # ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+    # argocd login idc-argocd.bravoerp.vn --username admin --password "$ARGOCD_PASSWORD" --skip-test-tls --grpc-web
+    # argocd app create cloud-platform --repo registry-git.bravoerp.vn/helm-repo --helm-chart cloud-platform --revision 0.2.1 --dest-namespace cloud-platform --dest-server  https://kubernetes.default.svc --upsert  --sync-option CreateNamespace=true
+
+  when: is_first_master
+  register: run_manifest
+
+- name: KHỞI CHẠY MANIFEST
+  debug:
+    var: run_manifest
+  when: is_first_master

@@ -1,0 +1,32 @@
+- name: THÊM THÔNG TIN /etc/hosts
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    state: present
+    block: |
+      {{IP_LOADBALANCING}} {{DOMAIN_APP}}
+      {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
+
+- name: HOSTNAME MASTER
+  set_fact:
+    hostname: "uat-k8sManage-master{{ item }}"
+  loop: "{{ range(1, groups['masters']|length + 1)|list }}"
+  when: inventory_hostname == groups['masters'][item - 1]
+
+- name: HOSTNAME SLAVES
+  set_fact:
+    hostname: "uat-k8sManage-slaves{{ item }}"
+  loop: "{{ range(1, groups['slaves']|length + 1)|list }}"
+  when: inventory_hostname == groups['slaves'][item - 1]
+
+- name: ĐẶT TÊN CHO HOSTNAME
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+
+# Setup agent
+# - name: WAZUH AGENT SETUP 
+#   shell: | 
+#     wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.8.1-1_amd64.deb && sudo WAZUH_MANAGER='192.168.140.108' dpkg -i ./wazuh-agent_4.8.1-1_amd64.deb
+#     systemctl daemon-reload
+#     systemctl enable wazuh-agent
+#     systemctl start wazuh-agent
+    
