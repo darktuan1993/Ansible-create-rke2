@@ -37,7 +37,7 @@
     echo "write-kubeconfig-mode: 0600
     tls-san:
       - {{DOMAIN_APP}}
-      - {{IP_LOADBALANCING}}}
+      - {{IP_LOADBALANCING}}
     disable-kube-proxy: no
     disable:
       - rke2-ingress-nginx
