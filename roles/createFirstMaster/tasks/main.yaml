@@ -1,32 +1,32 @@
 # Check node Master chính
-- name: XÁC ĐỊNH HOST MASTER ĐẦU TIÊN
+- name: XÁC ĐỊNH HOST MASTER FIRST
   ansible.builtin.set_fact:
     is_first_master: "{{ groups['masters'].index(inventory_hostname) == 0 }}"
 
-- name: XÁC ĐỊNH HOST MASTER KHÁC
+- name: XÁC ĐỊNH HOST MASTER OTHER
   ansible.builtin.set_fact:
     is_other_master: "{{ groups['masters'].index(inventory_hostname) > 0 }}"
 
-- name: IN KẾT QUẢ HOST MASTER ĐẦU TIÊN
-  debug:
-    msg: "Host này là master đầu tiên"
-  when: is_first_master
-
-- name: IN KẾT QUẢ HOST MASTER KHÁC
-  debug:
-    msg: "Host này là master khác"
-  when: is_other_master
-
-
-
-
-
-# Init First Node Master
-# - name: CAI DAT RKE2-SERVER
-#   shell: |
-#     curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION={{VERSION_RKE2}} INSTALL_RKE2_TYPE=server sh -
+# - name: IN KẾT QUẢ HOST MASTER ĐẦU TIÊN
+#   debug:
+#     msg: "Host này là master đầu tiên"
 #   when: is_first_master
-#   register: rke2_setup
+
+# - name: IN KẾT QUẢ HOST MASTER KHÁC
+#   debug:
+#     msg: "Host này là master khác"
+#   when: is_other_master
+
+# CÀI ĐẶT RKE2-SERVER
+- name: CAI DAT RKE2-SERVER
+  shell: |
+    curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION={{VERSION_RKE2}} INSTALL_RKE2_TYPE=server sh -
+  when: is_first_master or is_other_master
+  register: rke2_setup
+
+
+
+
 
 # - name: CHECK LIST CAI DAT
 #   debug:
