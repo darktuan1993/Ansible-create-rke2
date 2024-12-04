@@ -1,4 +1,4 @@
-- name: ==== KIỂM TRA BIẾN MÔI TRƯỜNG TRONG ANSIBLE  ====
+- name: ==== KIEM TRA BIEN MOI TRUONG TRONG ANSIBLE  ====
   hosts: k8s-cluster
   gather_facts: false
   # tasks:
@@ -6,7 +6,7 @@
   #     include_vars:
   #       file: global_vars/var.yaml
 
-- name: ==== KHỞI TẠO TASK TẠO RANCHER KUBERNETES ENGINE 2 ====
+- name: ==== KHOI TAO RANCHER KUBERNETES ENGINE 2 ====
   hosts: k8s-cluster
   roles:
      - pingCheck
