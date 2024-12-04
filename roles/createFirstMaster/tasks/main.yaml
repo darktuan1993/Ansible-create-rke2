@@ -29,17 +29,17 @@
   debug:
     var: rke2_setup
 
-# #  tạo thư mục service account
-# - name: Tạo thư mục service account
-#   shell: |
-#     mkdir -p $HOME/.kube
-#     cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-#     chown $(id -u):$(id -g) $HOME/.kube/config
-#   when: is_first_master
-#   register: createfolder
+#  tạo thư mục service account
+- name: Tạo thư mục service account
+  shell: |
+    mkdir -p /etc/rancher/rke2
+    touch /etc/rancher/rke2/config.yaml
+    mkdir -p /var/backups/etcd-snapshot
+  when: is_first_master or is_other_master
+  register: createfolder
 
-# - name: Tạo thư mục service account
-#   debug:
-#     var: createfolder
-#   when: is_first_master
+- name: Tạo thư mục service account
+  debug:
+    var: createfolder
+  when: is_first_master or is_other_master
 
