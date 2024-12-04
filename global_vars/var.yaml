@@ -1,17 +1,10 @@
 # Thông tin chung version K8S
-# VERSION_k8s: 1.28
-# VERSION_PATCH: 14-2.1
+VERSION_k8s: 1.28
+VERSION_PATCH: 14-2.1
 
 
-# # Thông tin load balancing 
-# IP_LOADBALANCING: 192.168.140.10
-# DOMAIN_APP: application-uat-cluster-k8s.bravo.com.vn
-# DOMAIN_MANAGER: manager-uat-cluster-k8s.bravo.com.vn
-# PORT_CLUSTER_APP: 6443
-
-# # Config Master
-# control-plane-endpoint: 
-# pod_network_cidr: 10.22.0.0/16
-
-
-# DOMAIN_RANCHER: uat-rancher.bravo.com.vn
+# Thông tin load balancing 
+IP_LOADBALANCING: 192.168.140.10
+DOMAIN_APP: application-uat-cluster-k8s.bravo.com.vn
+DOMAIN_MANAGER: manager-uat-cluster-k8s.bravo.com.vn
+PORT_CLUSTER_APP: 6443
