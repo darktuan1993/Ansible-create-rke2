@@ -24,14 +24,9 @@
   when: is_first_master or is_other_master
   register: rke2_setup
 
-
-
-
-
-# - name: CHECK LIST CAI DAT
-#   debug:
-#     var: rke2_setup
-#   when: is_first_master
+- name: CHECK LIST CAI DAT
+  debug:
+    var: rke2_setup
 
 # #  tạo thư mục service account
 # - name: Tạo thư mục service account
