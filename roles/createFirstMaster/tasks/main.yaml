@@ -57,3 +57,8 @@
   when: is_first_master or is_other_master
   register: createfolder
 
+- name: ENABLE SERVICE RKE2-SERVER
+  ansible.builtin.systemd:
+    name: rke2-server.service
+    enabled: true
+    state: started
