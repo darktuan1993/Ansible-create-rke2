@@ -3,7 +3,10 @@ VERSION_k8s: 1.28
 VERSION_PATCH: 14-2.1
 
 
-# Thông tin load balancing 
+# Tên host name
+HOSTNAME_SV: test
+
+# Thông tin load balancing RKE2
 IP_LOADBALANCING: 192.168.140.10
 DOMAIN_APP: test.local
 DOMAIN_MANAGER: test.local

@@ -8,13 +8,13 @@
 
 - name: HOSTNAME MASTER
   set_fact:
-    hostname: "uat-k8sManage-master{{ item }}"
+    hostname: "{{HOSTNAME_SV}}-master{{ item }}"
   loop: "{{ range(1, groups['masters']|length + 1)|list }}"
   when: inventory_hostname == groups['masters'][item - 1]
 
 - name: HOSTNAME SLAVES
   set_fact:
-    hostname: "uat-k8sManage-slaves{{ item }}"
+    hostname: "{{HOSTNAME_SV}}-slaves{{ item }}"
   loop: "{{ range(1, groups['slaves']|length + 1)|list }}"
   when: inventory_hostname == groups['slaves'][item - 1]
 
