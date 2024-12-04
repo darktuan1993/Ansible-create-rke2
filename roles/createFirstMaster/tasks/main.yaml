@@ -1,13 +1,11 @@
 # Check node Master chính
-- name: KIEM TRA MASTER DAU TIEN
+- name: XÁC ĐỊNH HOST MASTER ĐẦU TIÊN
   ansible.builtin.set_fact:
-    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+    is_first_master: "{{ groups['masters'].index(inventory_hostname) == 0 }}"
 
-- name: KIEM TRA MASTER KHAC
+- name: XÁC ĐỊNH HOST MASTER KHÁC
   ansible.builtin.set_fact:
-    is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
-
-
+    is_other_master: "{{ groups['masters'].index(inventory_hostname) > 0 }}"
 # Init First Node Master
 # - name: CAI DAT RKE2-SERVER
 #   shell: |
@@ -15,7 +13,7 @@
 #   when: is_first_master
 #   register: rke2_setup
 
-# - name: CHECK LIST CAI DAT 
+# - name: CHECK LIST CAI DAT
 #   debug:
 #     var: rke2_setup
 #   when: is_first_master
@@ -34,4 +32,3 @@
 #     var: createfolder
 #   when: is_first_master
 
-    
