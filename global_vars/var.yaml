@@ -5,6 +5,7 @@ VERSION_PATCH: 14-2.1
 
 # Tên host name
 HOSTNAME_SV: test
+EVN_SV: dev
 
 # Thông tin load balancing RKE2
 IP_LOADBALANCING: 192.168.140.10
