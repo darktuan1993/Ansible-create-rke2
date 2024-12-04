@@ -34,6 +34,27 @@
     mkdir -p /etc/rancher/rke2
     touch /etc/rancher/rke2/config.yaml
     mkdir -p /var/backups/etcd-snapshot
+    echo "write-kubeconfig-mode: 0600
+    tls-san:
+      - cn-rke2-master.bravo.com.vn
+      - 192.168.140.207
+    disable-kube-proxy: no
+    disable:
+      - rke2-ingress-nginx
+    disable-cloud-controller: yes
+    #### ETCD ####
+    etcd-snapshot-name: etcd-snapshot
+    etcd-snapshot-schedule-cron: \"0 12 * * *\"
+    etcd-snapshot-retention: 5
+    etcd-snapshot-dir: /var/backups/etcd-snapshot
+    etcd-snapshot-compress: true
+
+
+    #### KUBELET ####
+    kubelet-arg:
+    - kube-reserved=cpu=400m,memory=2Gi
+    - system-reserved=cpu=400m,memory=2Gi" >> /etc/rancher/rke2/config.yaml
+    
   when: is_first_master or is_other_master
   register: createfolder
 
