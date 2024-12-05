@@ -1,5 +1,5 @@
 - name: Xóa Kubernetes
-  script: ../../script/delete-ubuntu.sh
+  shell: /usr/local/bin/rke2-uninstall.sh
   become: yes
   register: script_output
 
