@@ -1,11 +1,11 @@
 # ############## CHECK THÔNG TIN MASTER  ####################
-# - name: ============= MASTER ĐẦU TIÊN =============
-#   ansible.builtin.set_fact:
-#     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+- name: ============= MASTER ĐẦU TIÊN =============
+  ansible.builtin.set_fact:
+    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-# - name: ============= MASTER KHÁC =============
-#   ansible.builtin.set_fact:
-#     is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
+- name: ============= MASTER KHÁC =============
+  ansible.builtin.set_fact:
+    is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
 
 # - name: ============= Verify Master Đầu tiên =============
 #   debug:
@@ -18,17 +18,17 @@
 # ############## CREATE INFORMATION JOIN CLUSTER  ####################
 
 # Create token join node
-- name: ============= Khởi tạo lệnh join master =============
+- name: ============= CHECK TOKEN JOIN  =============
   shell: cat /var/lib/rancher/rke2/server/node-token
   register: kubeadm_join_command
   when: is_first_master
 
-- name: ============= Lấy thông tin lệnh join =============
+- name: ============= TOKEN =============
   set_fact:
     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
   when: is_first_master
 
-- name: ============= Verify lệnh join master =============
+- name: ============= VERIFY TOKEN =============
   debug:
     var: kubeadm_join_command
   when: is_first_master
