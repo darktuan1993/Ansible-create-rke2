@@ -17,6 +17,8 @@
 
 # # ############## JOIN WORKER VÀO CLUSTER  ####################
 
+
+
 # Create token join node
 - name: CHECK TOKEN JOIN
   shell: cat /var/lib/rancher/rke2/server/node-token
@@ -28,6 +30,14 @@
     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
   when: is_first_master
   run_once: true
+
+# CÀI ĐẶT RKE2-SERVER
+- name: CAI DAT RKE2-AGENT
+  shell: |
+    wget -qO - https://get.rke2.io | INSTALL_RKE2_VERSION={{VERSION_RKE2}}  INSTALL_RKE2_TYPE=agent sh -
+  when: is_other_worker
+  register: rke2_setup
+
 
 # JOIN WORKER
 - name: KHOI TAO CONFIG CHO WORKER 
@@ -45,7 +55,6 @@
 
   register: create_join_cluster
   when: is_other_worker
-
 
 - name: ENABLE SERVICE RKE2-AGENT TREN NODE OTHER
   shell: systemctl start rke2-agent.service
