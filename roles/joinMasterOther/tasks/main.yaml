@@ -1,37 +1,63 @@
 # ############## CHECK THÔNG TIN MASTER  ####################
-- name: ============= MASTER ĐẦU TIÊN =============
+- name: MASTER FIRST
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-- name: ============= MASTER KHÁC =============
+- name: MASTER OTHER
   ansible.builtin.set_fact:
     is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
 
-# - name: ============= Verify Master Đầu tiên =============
-#   debug:
-#     var: is_first_master
-
-# - name: ============= Verify Master khác =============
-#   debug:
-#     var: is_other_master
-
-# ############## CREATE INFORMATION JOIN CLUSTER  ####################
-
 # Create token join node
-- name: ============= CHECK TOKEN JOIN  =============
+- name: CHECK TOKEN JOIN
   shell: cat /var/lib/rancher/rke2/server/node-token
   register: kubeadm_join_command
   when: is_first_master
 
-- name: ============= TOKEN =============
+- name: TOKEN
   set_fact:
     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
   when: is_first_master
 
-- name: ============= VERIFY TOKEN =============
+- name: VERIFY TOKEN
   debug:
     var: command_join_cluster
   when: is_first_master
+
+# Tạo Certificate Join cluster node master
+- name: KHOI TAO CONFIG CHO OTHER CLUSTER
+  shell: |
+    mkdir -p /etc/rancher/rke2
+    touch /etc/rancher/rke2/config.yaml
+    mkdir -p /var/backups/etcd-snapshot
+    echo "write-kubeconfig-mode: 0600
+    server: {{command_join_cluster}}
+    tls-san:
+      - {{DOMAIN_APP}}
+      - {{IP_LOADBALANCING}}
+    disable-kube-proxy: no
+    disable:
+      - rke2-ingress-nginx
+    disable-cloud-controller: yes
+    #### ETCD ####
+    etcd-snapshot-name: etcd-snapshot
+    etcd-snapshot-schedule-cron: \"0 12 * * *\"
+    etcd-snapshot-retention: 5
+    etcd-snapshot-dir: /var/backups/etcd-snapshot
+    etcd-snapshot-compress: true
+
+    #### KUBELET ####
+    kubelet-arg:
+    - kube-reserved=cpu=400m,memory=2Gi
+    - system-reserved=cpu=400m,memory=2Gi" >> /etc/rancher/rke2/config.yaml
+
+  register: create_join_cluster
+  when: is_other_master
+
+- name: KET QUA
+  debug:
+    var: create_join_cluster
+  when: is_other_master
+
 
 # # Tạo Certificate Join cluster node master
 # - name: ============= Khởi tạo certificate =============
@@ -55,7 +81,7 @@
 #     create_command_join: "{{ kubeadm_join_command.stdout | default('') }} --control-plane --certificate-key {{ upload_certs_output.stdout_lines[-1] | default('') }}"
 #   when: is_first_master
 
-# - name: ============= Verify lệnh join node master ============= 
+# - name: ============= Verify lệnh join node master =============
 #   debug:
 #     var: create_command_join
 #   when: is_first_master
@@ -70,8 +96,4 @@
 #   debug:
 #     var: join_master_output
 #   when: is_other_master
-
-
-
-
 
