@@ -1,0 +1,57 @@
+# ############## CHECK THÔNG TIN MASTER  ####################
+- name: ============= MASTER =============
+  ansible.builtin.set_fact:
+    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+
+- name: ============= WORKER KHÁC =============
+  ansible.builtin.set_fact:
+    is_other_worker: "{{ inventory_hostname in groups['slaves'] }}"
+
+# - name: ============= MASTER =============
+#   debug:
+#     var: is_first_master
+
+# - name: ============= WORKER KHÁC =============
+#   debug:
+#     var: is_other_worker
+
+# # ############## JOIN WORKER VÀO CLUSTER  ####################
+
+# Create token join node
+- name: CHECK TOKEN JOIN
+  shell: cat /var/lib/rancher/rke2/server/node-token
+  register: kubeadm_join_command
+  when: is_first_master
+
+- name: TOKEN
+  set_fact:
+    command_join_cluster: "{{ kubeadm_join_command.stdout }}"
+  when: is_first_master
+  run_once: true
+
+# JOIN WORKER
+- name: KHOI TAO CONFIG CHO WORKER 
+  shell: |
+    mkdir -p /etc/rancher/rke2
+    touch /etc/rancher/rke2/config.yaml
+    echo "
+    server: https://{{DOMAIN_CLUSTER}}:{{PORT_RKE2_SERVICE}}
+    token: {{ command_join_cluster }}
+
+    #### KUBELET ####
+    kubelet-arg:
+    - kube-reserved=cpu=400m,memory=2Gi
+    - system-reserved=cpu=400m,memory=2Gi" > /etc/rancher/rke2/config.yaml
+
+  register: create_join_cluster
+  when: is_other_worker
+
+
+- name: ENABLE SERVICE RKE2-AGENT TREN NODE OTHER
+  shell: systemctl start rke2-agent.service
+  when: is_other_worker
+  register: rke2_debug
+
+- name: DEBUG
+  debug:
+    var: rke2_debug
