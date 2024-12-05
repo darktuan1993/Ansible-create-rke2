@@ -31,7 +31,7 @@
     touch /etc/rancher/rke2/config.yaml
     mkdir -p /var/backups/etcd-snapshot
     echo "write-kubeconfig-mode: 0600
-    server: https://{{DOMAIN_CLUSTER}}:9345
+    server: https://{{DOMAIN_CLUSTER}}:{{PORT_RKE2_SERVICE}}
     token: {{ command_join_cluster }}
     tls-san:
       - {{DOMAIN_CLUSTER}}
@@ -68,43 +68,3 @@
 - name: DEBUG
   debug:
     var: rke2_debug
-
-
-# # Tạo Certificate Join cluster node master
-# - name: ============= Khởi tạo certificate =============
-#   shell: kubeadm init phase upload-certs --upload-certs
-#   register: upload_certs_output
-#   when: is_first_master
-
-# - name: ============= Lấy thông tin certificate =============
-#   set_fact:
-#     certificate_key_line: "{{ upload_certs_output.stdout_lines[-1] }}"
-#   when: is_first_master
-
-# - name: ============= Check thông tin certificate =============
-#   debug:
-#     var: certificate_key_line
-#   when: is_first_master
-
-# # Gộp lệnh join master
-# - name: ============= Khởi tạo lệnh join node master =============
-#   set_fact:
-#     create_command_join: "{{ kubeadm_join_command.stdout | default('') }} --control-plane --certificate-key {{ upload_certs_output.stdout_lines[-1] | default('') }}"
-#   when: is_first_master
-
-# - name: ============= Verify lệnh join node master =============
-#   debug:
-#     var: create_command_join
-#   when: is_first_master
-
-# # JOIN MASTER
-# - name: ============= JOIN MASTER OTHER IN CLUSTER =============
-#   shell: "{{ hostvars[groups['masters'][0]].create_command_join }}"
-#   register: join_master_output
-#   when: is_other_master
-
-# - name: join_master_output
-#   debug:
-#     var: join_master_output
-#   when: is_other_master
-
