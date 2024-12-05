@@ -30,7 +30,7 @@
 
 - name: ============= VERIFY TOKEN =============
   debug:
-    var: kubeadm_join_command
+    var: command_join_cluster
   when: is_first_master
 
 # # Tạo Certificate Join cluster node master
