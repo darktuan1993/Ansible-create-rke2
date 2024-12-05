@@ -30,7 +30,7 @@
     touch /etc/rancher/rke2/config.yaml
     mkdir -p /var/backups/etcd-snapshot
     echo "write-kubeconfig-mode: 0600
-    server: {{command_join_cluster}}
+    server: {{kubeadm_join_command.stdout}}
     tls-san:
       - {{DOMAIN_APP}}
       - {{IP_LOADBALANCING}}
