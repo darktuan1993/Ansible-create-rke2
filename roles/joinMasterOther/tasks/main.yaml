@@ -23,10 +23,10 @@
   register: kubeadm_join_command
   when: is_first_master
 
-# - name: ============= Lấy thông tin lệnh join =============
-#   set_fact:
-#     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
-#   when: is_first_master
+- name: ============= Lấy thông tin lệnh join =============
+  set_fact:
+    command_join_cluster: "{{ kubeadm_join_command.stdout }}"
+  when: is_first_master
 
 - name: ============= Verify lệnh join master =============
   debug:
