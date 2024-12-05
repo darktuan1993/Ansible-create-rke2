@@ -17,6 +17,7 @@
   set_fact:
     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
   when: is_first_master
+  run_once: true
 
 - name: VERIFY TOKEN
   debug:
