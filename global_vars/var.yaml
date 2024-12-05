@@ -12,6 +12,6 @@ EVN_SV: dev
 
 # Thông tin load balancing RKE2
 IP_LOADBALANCING: 192.168.140.163
-DOMAIN_APP: rke2-test.local
-DOMAIN_MANAGER: rke2-test.local
+DOMAIN_CLUSTER: rke2-test.local
+# DOMAIN_MANAGER: rke2-test.local
 PORT_CLUSTER_APP: 6443
