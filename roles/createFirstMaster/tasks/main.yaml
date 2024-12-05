@@ -57,8 +57,5 @@
   when: is_first_master or is_other_master
 
 - name: ENABLE SERVICE RKE2-SERVER
-  ansible.builtin.systemd:
-    name: rke2-server.service
-    enabled: true
-    state: started
+  shell: systemctl start rke2-server.service
   when: is_first_master
