@@ -49,7 +49,7 @@
     #### KUBELET ####
     kubelet-arg:
     - kube-reserved=cpu=400m,memory=2Gi
-    - system-reserved=cpu=400m,memory=2Gi" >> /etc/rancher/rke2/config.yaml
+    - system-reserved=cpu=400m,memory=2Gi" > /etc/rancher/rke2/config.yaml
 
   register: create_join_cluster
   when: is_other_master
