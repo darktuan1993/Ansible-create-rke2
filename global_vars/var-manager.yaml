@@ -8,7 +8,7 @@ VERSION_RKE2: v1.28.15+rke2r1
 
 ######### Tên host name
 HOSTNAME_SV: rke2
-EVN_SV: testtuan
+EVN_SV: manager
 
 ######### Thông tin load balancing RKE2
 IP_LOADBALANCING: 192.168.140.163
