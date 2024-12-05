@@ -19,10 +19,10 @@
   when: is_first_master
   run_once: true
 
-- name: VERIFY TOKEN
-  debug:
-    var: command_join_cluster
-  when: is_first_master
+# - name: VERIFY TOKEN
+#   debug:
+#     var: command_join_cluster
+#   when: is_first_master
 
 # Tạo Certificate Join cluster node master
 - name: KHOI TAO CONFIG CHO OTHER CLUSTER
@@ -54,10 +54,19 @@
   register: create_join_cluster
   when: is_other_master
 
-- name: KET QUA
-  debug:
-    var: create_join_cluster
+# - name: KET QUA
+#   debug:
+#     var: create_join_cluster
+#   when: is_other_master
+
+- name: ENABLE SERVICE RKE2-SERVER TREN NODE OTHER
+  shell: systemctl start rke2-server.service
   when: is_other_master
+  register: rke2_debug
+
+- name: DEBUG
+  debug:
+    var: rke2_debug
 
 
 # # Tạo Certificate Join cluster node master
