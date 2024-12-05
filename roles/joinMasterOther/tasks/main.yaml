@@ -1,19 +1,19 @@
 # ############## CHECK THÔNG TIN MASTER  ####################
-- name: ============= MASTER ĐẦU TIÊN =============
-  ansible.builtin.set_fact:
-    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+# - name: ============= MASTER ĐẦU TIÊN =============
+#   ansible.builtin.set_fact:
+#     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-- name: ============= MASTER KHÁC =============
-  ansible.builtin.set_fact:
-    is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
+# - name: ============= MASTER KHÁC =============
+#   ansible.builtin.set_fact:
+#     is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
 
-- name: ============= Verify Master Đầu tiên =============
-  debug:
-    var: is_first_master
+# - name: ============= Verify Master Đầu tiên =============
+#   debug:
+#     var: is_first_master
 
-- name: ============= Verify Master khác =============
-  debug:
-    var: is_other_master
+# - name: ============= Verify Master khác =============
+#   debug:
+#     var: is_other_master
 
 # ############## CREATE INFORMATION JOIN CLUSTER  ####################
 
