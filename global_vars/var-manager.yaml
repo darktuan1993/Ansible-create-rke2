@@ -14,6 +14,5 @@ EVN_SV: testtuan
 IP_LOADBALANCING: 192.168.140.163
 DOMAIN_CLUSTER: rke2-test.local
 DOMAIN_MANAGER: rke2-test-manager.local
-
-
 PORT_RKE2_SERVICE: 9345
+DOMAIN_RANCHER: rke2-test.bravo.com.vn
