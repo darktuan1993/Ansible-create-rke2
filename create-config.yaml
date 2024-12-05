@@ -2,9 +2,12 @@
   hosts: k8s-cluster
   gather_facts: false
   tasks:
-    - name: BIEN MOI TRUONG ANSIBLE
+    # - name: ENV MANAGER ANSIBLE
+    #   include_vars:
+    #     file: global_vars/var-manager.yaml
+    - name: ENV APPLICATION ANSIBLE
       include_vars:
-        file: global_vars/var.yaml
+        file: global_vars/var-application.yaml
 
 - name: ==================================== BRAVO - RANCHER RKE2 AUTOMATION ====================================
   hosts: k8s-cluster
