@@ -9,13 +9,13 @@
 - name: ==================================== BRAVO - RANCHER RKE2 AUTOMATION ====================================
   hosts: k8s-cluster
   roles:
-     - pingCheck
-     - createFileHost
+    #  - pingCheck
+    #  - createFileHost
     ###################### CÀI ĐẶT MASTER VÀ JOIN MASTER ####################   
-     - role: createFirstMaster
+    #  - role: createFirstMaster
+    #    when: inventory_hostname in groups['masters']
+     - role: joinMasterOther
        when: inventory_hostname in groups['masters']
-    #  - role: joinMasterOther
-    # #    when: inventory_hostname in groups['masters']
     # # #  ###################### JOIN WORKER ####################
     # #  - joinWorkerOther
     # #  - setupPluginKube

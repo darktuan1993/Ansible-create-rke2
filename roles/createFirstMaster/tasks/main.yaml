@@ -54,7 +54,7 @@
     - kube-reserved=cpu=400m,memory=2Gi
     - system-reserved=cpu=400m,memory=2Gi" >> /etc/rancher/rke2/config.yaml
 
-  when: is_first_master or is_other_master
+  when: is_first_master
 
 - name: ENABLE SERVICE RKE2-SERVER
   shell: systemctl start rke2-server.service
