@@ -11,7 +11,7 @@ HOSTNAME_SV: rke2
 EVN_SV: manager
 
 ######### Thông tin load balancing RKE2
-IP_LOADBALANCING: 192.168.140.163
+IP_LOADBALANCING: 192.168.140.164
 DOMAIN_CLUSTER: rke2-test.local
 DOMAIN_MANAGER: rke2-test-manager.local
 PORT_RKE2_SERVICE: 9345
