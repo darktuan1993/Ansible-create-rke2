@@ -5,7 +5,6 @@
     block: |
       {{IP_LOADBALANCING}} {{DOMAIN_CLUSTER}}
       {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
-      192.168.140.208  techdev-rancher.bravo.com.vn
 
 - name: HOSTNAME MASTER
   set_fact:
