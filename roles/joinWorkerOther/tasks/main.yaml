@@ -50,6 +50,7 @@
 
     #### KUBELET ####
     kubelet-arg:
+    - max-pods=400
     - kube-reserved=cpu=400m,memory=2Gi
     - system-reserved=cpu=400m,memory=2Gi" > /etc/rancher/rke2/config.yaml
 

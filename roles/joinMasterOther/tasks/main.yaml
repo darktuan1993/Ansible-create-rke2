@@ -41,16 +41,42 @@
       - rke2-ingress-nginx
     disable-cloud-controller: yes
     #### ETCD ####
-    etcd-snapshot-name: etcd-snapshot
+    etcd-snapshot-name: etcd-uat
     etcd-snapshot-schedule-cron: \"0 12 * * *\"
     etcd-snapshot-retention: 5
     etcd-snapshot-dir: /var/backups/etcd-snapshot
     etcd-snapshot-compress: true
 
-    #### KUBELET ####
+    #-------------- API-SERVER --------------
+    ## flag 
+    kube-apiserver-arg:                               
+      - authorization-mode=RBAC,Node
+      - anonymous-auth=false
+
+    #-------------- CONTROL-PLANE --------------
+    ## Resource
+    control-plane-resource-requests:                  
+      - kube-apiserver-cpu=800m
+      - kube-apiserver-memory=1512M
+      - kube-scheduler-cpu=550m
+      - kube-scheduler-memory=512M
+      - etcd-cpu=1500m
+    #control-plane-resource-limits:                  
+    ## Resource  
+
+    #-------------- KUBE-PROXY --------------
+    kube-proxy-arg:                                   
+
+    #-------------- KUBE-SCHEDULES --------------
+    #kube-scheduler-arg:
+    kube-scheduler-extra-env: "TZ=Asia/Ho_Chi_Minh"    
+
+    #-------------- KUBELET --------------
     kubelet-arg:
-    - kube-reserved=cpu=400m,memory=2Gi
-    - system-reserved=cpu=400m,memory=2Gi" > /etc/rancher/rke2/config.yaml
+    - kube-reserved=cpu=500m,memory=2Gi
+    - system-reserved=cpu=500m,memory=2Gi" > /etc/rancher/rke2/config.yaml
+
+
 
   register: create_join_cluster
   when: is_other_master
