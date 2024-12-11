@@ -86,7 +86,7 @@
 
     #-------------- KUBE-SCHEDULES --------------
     #kube-scheduler-arg:
-    kube-scheduler-extra-env: "TZ=Asia/Ho_Chi_Minh" > /etc/rancher/rke2/config.yaml
+    kube-scheduler-extra-env: 'TZ=Asia/Ho_Chi_Minh' " > /etc/rancher/rke2/config.yaml
 
   when: is_first_master
 
