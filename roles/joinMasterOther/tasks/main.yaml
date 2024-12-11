@@ -31,10 +31,10 @@
     touch /etc/rancher/rke2/config.yaml
     mkdir -p /var/backups/etcd-snapshot
     echo "write-kubeconfig-mode: 0600
-    server: https://{{DOMAIN_CLUSTER}}:{{PORT_RKE2_SERVICE}}
+    server: https://{{DOMAIN_MANAGER}}:{{PORT_RKE2_SERVICE}}
     token: {{ command_join_cluster }}
     tls-san:
-      - {{DOMAIN_CLUSTER}}
+      - {{DOMAIN_MANAGER}}
       - {{IP_LOADBALANCING}}
     disable-kube-proxy: no
     disable:
@@ -65,7 +65,7 @@
     ## Resource  
 
     #-------------- KUBE-PROXY --------------
-    kube-proxy-arg:                                   
+    #kube-proxy-arg:                                   
 
     #-------------- KUBE-SCHEDULES --------------
     #kube-scheduler-arg:

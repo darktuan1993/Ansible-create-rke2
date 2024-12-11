@@ -45,14 +45,14 @@
     mkdir -p /etc/rancher/rke2
     touch /etc/rancher/rke2/config.yaml
     echo "
-    server: https://{{DOMAIN_CLUSTER}}:{{PORT_RKE2_SERVICE}}
+    server: https://{{DOMAIN_MANAGER}}:{{PORT_RKE2_SERVICE}}
     token: {{ command_join_cluster }}
 
     #### KUBELET ####
     kubelet-arg:
-    - max-pods=400
-    - kube-reserved=cpu=400m,memory=2Gi
-    - system-reserved=cpu=400m,memory=2Gi" > /etc/rancher/rke2/config.yaml
+    - max-pods=250
+    - kube-reserved=cpu=1000m,memory=2Gi
+    - system-reserved=cpu=1000m,memory=2Gi" > /etc/rancher/rke2/config.yaml
 
   register: create_join_cluster
   when: is_other_worker

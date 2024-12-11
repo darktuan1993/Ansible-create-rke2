@@ -44,23 +44,52 @@
     mkdir -p /var/backups/etcd-snapshot
     echo "write-kubeconfig-mode: 0600
     tls-san:
-      - {{DOMAIN_CLUSTER}}
+      - {{DOMAIN_MANAGER}}
       - {{IP_LOADBALANCING}}
     disable-kube-proxy: no
     disable:
       - rke2-ingress-nginx
     disable-cloud-controller: yes
     #### ETCD ####
-    etcd-snapshot-name: etcd-snapshot
+    etcd-snapshot-name: etcd-master-snapshot
     etcd-snapshot-schedule-cron: \"0 12 * * *\"
     etcd-snapshot-retention: 5
     etcd-snapshot-dir: /var/backups/etcd-snapshot
     etcd-snapshot-compress: true
 
-    #### KUBELET ####
-    kubelet-arg:
-    - kube-reserved=cpu=400m,memory=2Gi
-    - system-reserved=cpu=400m,memory=2Gi" > /etc/rancher/rke2/config.yaml
+    #-------------- KUBELET --------------
+    ## flag
+    kubelet-arg:                                     
+      - kube-reserved=cpu=400m,memory=2Gi
+      - system-reserved=cpu=400m,memory=2Gi
+      - max-pods=200
+
+    #-------------- API-SERVER --------------
+    ## flag 
+    kube-apiserver-arg:                               
+      - authorization-mode=RBAC,Node
+      - anonymous-auth=false
+
+    #-------------- CONTROL-PLANE --------------
+    ## Resource
+    control-plane-resource-requests:                  
+      - kube-apiserver-cpu=800m
+      - kube-apiserver-memory=1512M
+      - kube-scheduler-cpu=550m
+      - kube-scheduler-memory=512M
+      - etcd-cpu=1500m
+    #control-plane-resource-limits:                  
+    ## Resource  
+
+    #-------------- KUBE-PROXY --------------
+    #kube-proxy-arg:                                   
+
+    #-------------- KUBE-SCHEDULES --------------
+    #kube-scheduler-arg:
+    kube-scheduler-extra-env: "TZ=Asia/Ho_Chi_Minh"    
+
+    
+    > /etc/rancher/rke2/config.yaml
 
   when: is_first_master
 
