@@ -7,7 +7,14 @@
   debug:
     var: is_first_master
 
-
+- name: Copy Kubernetes manifest to remote server
+  copy:
+    src: "../../../script"
+    dest: "/tmp"
+    mode: '0755'
+    directory_mode: '0755'
+  when: is_first_master
+  
 ################## CHẠY KHỞI CHẠY CÁC PLUGIN #############
 
 - name: KHỞI CHẠY CÁC PLUGIN MANIFEST
