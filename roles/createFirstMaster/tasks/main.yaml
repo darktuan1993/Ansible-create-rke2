@@ -73,10 +73,10 @@
     #-------------- CONTROL-PLANE --------------
     ## Resource
     control-plane-resource-requests:                  
-      - kube-apiserver-cpu=800m
-      - kube-apiserver-memory=1512M
-      - kube-scheduler-cpu=550m
-      - kube-scheduler-memory=512M
+      - kube-apiserver-cpu=1000m
+      - kube-apiserver-memory=1500M
+      - kube-scheduler-cpu=1500m
+      - kube-scheduler-memory=1000M
       - etcd-cpu=1500m
     #control-plane-resource-limits:                  
     ## Resource  
