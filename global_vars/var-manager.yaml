@@ -13,7 +13,10 @@ EVN_SV: uat
 ######### Thông tin load balancing RKE2
 IP_LOADBALANCING: 192.168.130.210
 DOMAIN_CLUSTER: uat-rke2-app01.bravo.com.vn
-DOMAIN_MANAGER: uat-rke2-manager.bravo.com.vn
+
+IP_FIRST_MASTER: 192.168.130.237
+
+# DOMAIN_MANAGER: uat-rke2-manager.bravo.com.vn
 
 PORT_RKE2_SERVICE: 9345
 DOMAIN_RANCHER: uat-rancher.bravo.com.vn

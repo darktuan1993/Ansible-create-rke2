@@ -44,8 +44,7 @@
     mkdir -p /var/backups/etcd-snapshot
     echo "write-kubeconfig-mode: 0600
     tls-san:
-      - {{DOMAIN_MANAGER}}
-      - {{IP_LOADBALANCING}}
+      - {{IP_FIRST_MASTER}}
     disable-kube-proxy: no
     disable:
       - rke2-ingress-nginx
