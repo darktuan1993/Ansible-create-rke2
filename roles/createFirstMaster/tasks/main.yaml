@@ -28,14 +28,6 @@
   debug:
     var: rke2_setup
 
-- name: Copy Kubernetes manifest to remote server
-  copy:
-    src: "../../../script"
-    dest: "/tmp"
-    mode: '0755'
-    directory_mode: '0755'
-  when: is_first_master
-
 #  tạo thư mục service account
 - name: TAO CAU HINH RKE2
   shell: |
@@ -44,7 +36,7 @@
     mkdir -p /var/backups/etcd-snapshot
     echo "write-kubeconfig-mode: 0600
     tls-san:
-      - {{DOMAIN_MANAGER}}
+      - {{DOMAIN_CLUSTER}}
       - {{IP_LOADBALANCING}}
     disable-kube-proxy: no
     disable:

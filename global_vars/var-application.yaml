@@ -7,11 +7,11 @@ VERSION_PATCH: 14-2.1
 VERSION_RKE2: v1.30.6+rke2r1
 
 ######### Tên host name
-HOSTNAME_SV: rke2
-EVN_SV: testtuan
+HOSTNAME_SV: rke2-app01
+EVN_SV: uat
 
 ######### Thông tin load balancing RKE2
-IP_LOADBALANCING: 192.168.140.163
-DOMAIN_CLUSTER: rke2-test.local
-DOMAIN_MANAGER: rke2-test-manager.local
-PORT_RKE2_SERVICE: 9345
+IP_LOADBALANCING: 192.168.130.210
+DOMAIN_CLUSTER: uat-rke2-app01.bravo.com.vn
+DOMAIN_MANAGER: uat-rke2-manager.bravo.com.vn
+PORT_RKE2_SERVICE: 9346

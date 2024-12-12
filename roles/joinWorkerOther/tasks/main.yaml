@@ -45,7 +45,7 @@
     mkdir -p /etc/rancher/rke2
     touch /etc/rancher/rke2/config.yaml
     echo "
-    server: https://{{DOMAIN_MANAGER}}:{{PORT_RKE2_SERVICE}}
+    server: https://{{DOMAIN_CLUSTER}}:{{PORT_RKE2_SERVICE}}
     token: {{ command_join_cluster }}
 
     #### KUBELET ####
