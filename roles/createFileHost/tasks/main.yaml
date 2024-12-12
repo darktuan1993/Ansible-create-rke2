@@ -4,7 +4,6 @@
     state: present
     block: |
       {{IP_LOADBALANCING}} {{DOMAIN_CLUSTER}}
-      {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
 
 - name: HOSTNAME MASTER
   set_fact:
